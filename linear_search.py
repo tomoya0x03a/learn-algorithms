@@ -1,5 +1,6 @@
 import unittest
 
+
 def linear_search(values, target):
     """リスト内で目標値を線形探索する関数。
 
@@ -14,6 +15,7 @@ def linear_search(values, target):
         if value == target:
             return i
     return None
+
 
 class TestLinearSearch(unittest.TestCase):
     def setUp(self):
@@ -30,5 +32,6 @@ class TestLinearSearch(unittest.TestCase):
         result = linear_search(self.values, 11)
         self.assertIsNone(result)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()
