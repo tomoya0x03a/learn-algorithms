@@ -1,6 +1,6 @@
 import unittest
 
-class stack():
+class Stack():
     """
     スタックデータ構造を表現するクラス。
     最初に指定されたサイズの配列を使用して、要素を積み上げることができる。
@@ -48,28 +48,28 @@ class TestStack(unittest.TestCase):
         output_values = []
         expected_values = [i for i in range(10, 0, -1)]
 
-        t_stack = stack(10)
+        stack = Stack(10)
 
         for i in input_values:
-            t_stack.push(i)
+            stack.push(i)
         
         for _ in range(10, 0, -1):
-            output_values.append(t_stack.pop())
+            output_values.append(stack.pop())
 
         self.assertEqual(output_values, expected_values)
 
     def test_exceeding_stack_capacity(self):
         # スタック領域を超えた場合のテスト
-        t_stack = stack(10)
+        stack = Stack(10)
         with self.assertRaises(MemoryError):
             for i in range(1, 12):
-                t_stack.push(i)
+                stack.push(i)
 
     def test_popping_from_empty_stack(self):
         # 取り出すデータが存在しない場合のテスト
-        t_stack = stack(10)
+        stack = Stack(10)
         with self.assertRaises(IndexError):
-            t_stack.pop()
+            stack.pop()
 
 if __name__ == "__main__":
     unittest.main()
