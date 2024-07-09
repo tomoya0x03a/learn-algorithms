@@ -1,43 +1,65 @@
 import unittest
 
-class RingBuffer():
+class RingBuffer:
+    """
+    リングバッファを実装したクラス。固定サイズのバッファを使用し、データの挿入と取得を循環的に行う。
+    """
+
     def __init__(self, size):
-        self.memory = [None] * size # 保持できる要素数
-        self.head = None # 先頭データの位置
-        self.tail = 0 # 挿入するデータの位置
+        """
+        指定されたサイズのリングバッファを初期化する。
+        """
+        self.memory = [None] * size  # バッファのサイズを指定し、メモリを初期化
+        self.head = 0  # 先頭データの位置を初期化
+        self.tail = 0  # 挿入するデータの位置を初期化
+        self.is_full = False  # バッファが満杯かどうかを示すフラグ
+        self.is_empty = True  # バッファが空かどうかを示すフラグ
 
     def enqueue(self, value):
-        if self.head == self.tail: # データが満杯のとき
-            self._raise_memory_error()
+        """
+        バッファにデータを挿入する。
+        """
+        if self.is_full:  # バッファが満杯のとき
+            self._raise_full_error()  # エラーを発生させる
 
-        if self.head is None: # データが空のとき
-            self.head = self.tail # 挿入するデータを先頭にする
+        self.memory[self.tail] = value  # データを挿入
+        self.tail = self._loop_index(self.tail + 1)  # tailを一つ後ろに移動
 
-        self.memory[self.tail] = value # データを挿入する
+        self.is_empty = False  # バッファが空ではなくなる
 
-        self.tail = self._loop_index(self.tail + 1) # tailを一つ後ろに移動する
+        if self.head == self.tail:  # 挿入後、バッファが満杯になったとき
+            self.is_full = True  # バッファが満杯であることを示すフラグを立てる
 
         return None
 
     def dequeue(self):
-        if self.head is None: # データが空のとき
-            self._raise_index_error()
+        """
+        バッファからデータを取り出す。
+        """
+        if self.is_empty:  # バッファが空のとき
+            self._raise_empty_error()  # エラーを発生させる
 
-        value = self.memory[self.head]
-        self.head = self._loop_index(self.head + 1) # headを一つ後ろに移動する
+        value = self.memory[self.head]  # 先頭のデータを取得
+        self.head = self._loop_index(self.head + 1)  # headを一つ後ろに移動
 
-        if self.head == self.tail: # データが空になったとき
-            self.head = None
+        self.is_full = False  # バッファが満杯ではなくなる
+
+        if self.head == self.tail:  # 取得後、バッファが空になったとき
+            self.is_empty = True  # バッファが空であることを示すフラグを立てる
 
         return value
 
     def _loop_index(self, index):
-        return index % len(self.memory) 
+        """
+        インデックスをバッファサイズで循環させる。
 
-    def _raise_index_error(self):
+        """
+        return index % len(self.memory)
+
+    def _raise_empty_error(self):
         raise IndexError('取り出すデータが存在しません')
 
-    def _raise_memory_error(self):
+    def _raise_full_error(self):
         raise MemoryError('これ以上データを入れられません')
 
 class TestRingBuffer(unittest.TestCase):
