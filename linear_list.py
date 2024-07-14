@@ -4,7 +4,7 @@ class LinearList():
     def __init__(self, size):
         self.data = [None] * size
         self.pointer = [None] * size
-        self.head = 0
+        self.head = None
 
     def add(self, value):
         current = None
@@ -20,8 +20,9 @@ class LinearList():
         if current is None:
             self._raise_full_error()
 
-        # 先頭なら処理を終了する
-        if current == self.head:
+        # 先頭ならHeadにポインタを設定する
+        if self.head is None:
+            self.head = current
             return
 
         tail = self.head
@@ -47,6 +48,9 @@ class LinearList():
                 else:
                     # 削除するデータのポインタを、削除するデータの前のデータのポインタに設定する
                     self.pointer[prev] = self.pointer[current]
+
+                # ポインタを削除する
+                self.pointer[current] = None
 
                 return True
             
