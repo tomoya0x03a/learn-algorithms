@@ -1,72 +1,121 @@
 import unittest
 
-
-def binary_search(sequence, target):
-    """リスト内で目標値を２分探索する関数。
-
-    sequence: 整列されたリスト
-    target: 探索対象の値
-    return: targetがsequence内に存在する場合はそのインデックスを、存在しない場合はNoneを返す
+class BinarySearch():
     """
-    length = len(sequence)
-    low = 0
-    high = length - 1
+    二分探索を実行するクラス。
+    
+    Attributes:
+        sequence (list): ソートされたデータのリスト。
+    """
+    
+    def __init__(self, sequence):
+        """
+        BinarySearchのコンストラクタ。
+        
+        Args:
+            sequence (list): ソートされたデータのリスト。
+        """
+        self.sequence = sequence
 
-    # 二分探索の実行
-    while low <= high:
-        middle = (low + high) // 2
+    def search(self, target):
+        """
+        二分探索を用いてtargetをsequenceの中から探す。
+        
+        Args:
+            target (int): 探索対象の値。
+        
+        Returns:
+            int or None: targetが見つかった場合はそのインデックス、見つからなかった場合はNoneを返す。
+        """
+        low = 0
+        hi = len(self.sequence) - 1
 
-        # 対象値が中央値と一致する場合、そのインデックスを返す
-        if target == sequence[middle]:
-            return middle
+        while low <= hi:
+            mid = (low + hi) // 2
+            
+            # 値が見つかったらインデックスを返す
+            if self.sequence[mid] == target:
+                return mid
 
-        # 対象値が中央値より小さい場合、下半分を探索
-        elif target < sequence[middle]:
-            high = middle - 1
+            # 探索範囲を半分に絞り込む
+            if target < self.sequence[mid]:
+                hi = mid - 1  # 対象値が中央値より小さい場合、探索範囲を下半分に絞り込む
+            else:
+                low = mid + 1  # 対象値が中央値より大きい場合、探索範囲を上半分に絞り込む
 
-        # 対象値が中央値より大きい場合、上半分を探索
-        elif target > sequence[middle]:
-            low = middle + 1
-
-    # 対象値がsequence内に存在しない場合、Noneを返す
-    return None
-
+        # 最後まで探索してtargetが見つからなかった場合Noneを返す
+        return None
 
 class TestBinarySearch(unittest.TestCase):
-    def setUp(self):
-        # テスト用のデータセット
-        self.sequence = [1, 4, 7, 9, 10, 16]
+    """
+    BinarySearchクラスのテストケースを実行するクラス。
+    """
+    
+    def test_even_number_of_elements_target_exists(self):
+        """
+        偶数の要素数を持つsequenceでtargetが存在する場合のテスト。
+        """
+        sequence = [1, 2, 9, 12, 20, 25, 32, 39]
+        binary_search = BinarySearch(sequence)
 
-    def test_existing_value(self):
-        # 存在する値の場合のテスト
-        result = binary_search(self.sequence, 1)
-        self.assertEqual(result, 0)
+        # それぞれのtargetが正しいインデックスで見つかるかを確認
+        self.assertEqual(binary_search.search(1), 0)
+        self.assertEqual(binary_search.search(2), 1)
+        self.assertEqual(binary_search.search(9), 2)
+        self.assertEqual(binary_search.search(12), 3)
+        self.assertEqual(binary_search.search(20), 4)
+        self.assertEqual(binary_search.search(25), 5)
+        self.assertEqual(binary_search.search(32), 6)
+        self.assertEqual(binary_search.search(39), 7)
 
-    def test_target_at_start_of_list(self):
-        # リストの最初に対象値が存在する場合のテスト
-        result = binary_search(self.sequence, 1)
-        self.assertEqual(result, 0)
+    def test_odd_number_of_elements_target_exists(self):
+        """
+        奇数の要素数を持つsequenceでtargetが存在する場合のテスト。
+        """
+        sequence = [1, 2, 9, 12, 20, 25, 32]
+        binary_search = BinarySearch(sequence)
 
-    def test_target_at_end_of_list(self):
-        # リストの最後に対象値が存在する場合のテスト
-        result = binary_search(self.sequence, 16)
-        self.assertEqual(result, 5)
+        # それぞれのtargetが正しいインデックスで見つかるかを確認
+        self.assertEqual(binary_search.search(1), 0)
+        self.assertEqual(binary_search.search(2), 1)
+        self.assertEqual(binary_search.search(9), 2)
+        self.assertEqual(binary_search.search(12), 3)
+        self.assertEqual(binary_search.search(20), 4)
+        self.assertEqual(binary_search.search(25), 5)
+        self.assertEqual(binary_search.search(32), 6)
 
-    def test_non_existing_value(self):
-        # 存在しない値の場合のテスト
-        result = binary_search(self.sequence, 8)
-        self.assertIsNone(result)
+    def test_even_number_of_elements_target_does_not_exist(self):
+        """
+        偶数の要素数を持つsequenceでtargetが存在しない場合のテスト。
+        """
+        sequence = [1, 2, 9, 12, 20, 25, 32, 39]
+        binary_search = BinarySearch(sequence)
 
-    def test_empty_list(self):
-        # 空のリストの場合のテスト
-        result = binary_search([], 1)
-        self.assertIsNone(result)
+        # targetが存在しないことを確認
+        self.assertEqual(binary_search.search(0), None)
+        self.assertEqual(binary_search.search(4), None)
+        self.assertEqual(binary_search.search(10), None)
+        self.assertEqual(binary_search.search(14), None)
+        self.assertEqual(binary_search.search(24), None)
+        self.assertEqual(binary_search.search(31), None)
+        self.assertEqual(binary_search.search(37), None)
+        self.assertEqual(binary_search.search(40), None)
 
-    def test_single_element_list(self):
-        # 単一要素のリストの場合のテスト
-        result = binary_search([1], 1)
-        self.assertEqual(result, 0)
+    def test_odd_number_of_elements_target_does_not_exist(self):
+        """
+        奇数の要素数を持つsequenceでtargetが存在しない場合のテスト。
+        """
+        sequence = [1, 2, 9, 12, 20, 25, 32]
+        binary_search = BinarySearch(sequence)
 
+        # targetが存在しないことを確認
+        self.assertEqual(binary_search.search(0), None)
+        self.assertEqual(binary_search.search(4), None)
+        self.assertEqual(binary_search.search(10), None)
+        self.assertEqual(binary_search.search(14), None)
+        self.assertEqual(binary_search.search(24), None)
+        self.assertEqual(binary_search.search(31), None)
+        self.assertEqual(binary_search.search(37), None)
 
 if __name__ == "__main__":
     unittest.main()
