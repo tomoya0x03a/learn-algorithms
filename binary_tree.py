@@ -1,21 +1,15 @@
 import unittest
+from typing import Optional
 
+Node = tuple[Optional[int], Optional[int], int]
+Nodes = list[Node]
 
 class BinaryTree():
-    def __init__(self, nodes=None):
-        self.nodes = nodes or [
-            [1, 2, 10],
-            [3, 4, 5],
-            [5, None, 12],
-            [None, None, 2],
-            [6, 7, 8],
-            [None, None, 11],
-            [None, None, 6],
-            [None, None, 9],
-        ]
+    def __init__(self, nodes: Nodes) -> None:
+        self.nodes = nodes
 
     def traverse(self):
-        def inorder_traversal(index):
+        def inorder_traversal(index: Optional[int]) -> list[int]:
             if index is None:
                 return []
 
@@ -32,14 +26,14 @@ class TestBinaryTree(unittest.TestCase):
     def setUp(self):
         # テスト用のデータセット
         self.nodes = [
-            [1, 2, 10],
-            [3, 4, 5],
-            [5, None, 12],
-            [None, None, 2],
-            [6, 7, 8],
-            [None, None, 11],
-            [None, None, 6],
-            [None, None, 9],
+            (1, 2, 10),
+            (3, 4, 5),
+            (5, None, 12),
+            (None, None, 2),
+            (6, 7, 8),
+            (None, None, 11),
+            (None, None, 6),
+            (None, None, 9),
         ]
 
     def test_traverse(self):
