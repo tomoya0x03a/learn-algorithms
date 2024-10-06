@@ -47,28 +47,28 @@ class TestBubbleSort(unittest.TestCase):
         """一般的なソートのテスト"""
         input_list = [8, 5, 2, 1, 7]
         expected_list = [1, 2, 5, 7, 8]
-        selection_sort = BubbleSort(input_list)
-        self.assertEqual(selection_sort.sort(), expected_list)
+        bubble_sort = BubbleSort(input_list)
+        self.assertEqual(bubble_sort.sort(), expected_list)
 
     def test_empty_list(self):
         """空リストのソートテスト"""
-        selection_sort = BubbleSort([])
-        self.assertEqual(selection_sort.sort(), [])
+        bubble_sort = BubbleSort([])
+        self.assertEqual(bubble_sort.sort(), [])
 
     def test_single_element_list(self):
         """単一要素のリストのソートテスト"""
-        selection_sort = BubbleSort([1])
-        self.assertEqual(selection_sort.sort(), [1])
+        bubble_sort = BubbleSort([1])
+        self.assertEqual(bubble_sort.sort(), [1])
 
     def test_sorted_list(self):
         """既にソート済みのリストのテスト"""
-        selection_sort = BubbleSort([1, 2, 3, 4, 5])
-        self.assertEqual(selection_sort.sort(), [1, 2, 3, 4, 5])
+        bubble_sort = BubbleSort([1, 2, 3, 4, 5])
+        self.assertEqual(bubble_sort.sort(), [1, 2, 3, 4, 5])
 
     def test_duplicate_elements(self):
         """重複要素を含むリストのテスト"""
-        selection_sort = BubbleSort([3, 2, 1, 2, 3])
-        self.assertEqual(selection_sort.sort(), [1, 2, 2, 3, 3])
+        bubble_sort = BubbleSort([3, 2, 1, 2, 3])
+        self.assertEqual(bubble_sort.sort(), [1, 2, 2, 3, 3])
 
 
 if __name__ == "__main__":
